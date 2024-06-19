@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Navigation from '@/components/Navigation';
 
@@ -6,6 +6,7 @@ const Layout = ({ children }) => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -16,6 +17,24 @@ const Layout = ({ children }) => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  const handleClickOutside = (event) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      setSidebarOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarOpen]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -40,6 +59,7 @@ const Layout = ({ children }) => {
   return (
     <div className="bg-blue-900 w-screen h-screen flex">
       <nav
+        ref={sidebarRef}
         className={`bg-gray-800 p-4 flex flex-col justify-between items-start fixed h-full z-10 transform transition-transform ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
