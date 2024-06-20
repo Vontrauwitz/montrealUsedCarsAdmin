@@ -57,7 +57,7 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="bg-blue-900 w-screen h-screen flex">
+    <div className="bg-blue-900 w-screen min-h-screen flex">
       <nav
         ref={sidebarRef}
         className={`bg-gray-800 p-4 flex flex-col justify-between items-start fixed h-full z-10 transform transition-transform ${
@@ -108,7 +108,7 @@ const Layout = ({ children }) => {
           </div>
         </div>
       </nav>
-      <div className="flex-1 p-8 pt-16" style={{ paddingLeft: sidebarOpen ? '16px' : '64px' }}>
+      <div className="flex-1 p-8 pt-16 min-h-screen" style={{ paddingLeft: sidebarOpen ? '16px' : '64px' }}>
         {!sidebarOpen && (
           <button onClick={toggleSidebar} className="text-white focus:outline-none fixed top-4 left-4">
             <svg
