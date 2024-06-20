@@ -7,9 +7,11 @@ export default async function handler(req, res) {
     const { method } = req;
 
     if (method === 'POST') {
-        const { brand, model, version, odometer, year, vinNumber, price } = req.body;
         try {
-            const carDoc = await Car.create({ brand, model, version, odometer, year, vinNumber, price });
+            const { brand, model, version, odometer, year, vinNumber, price, photos } = req.body;
+            const carData = { brand, model, version, odometer, year, vinNumber, price, photos };
+
+            const carDoc = await Car.create(carData);
             res.status(201).json(carDoc);
         } catch (error) {
             console.error("Error creating car:", error);
@@ -36,9 +38,9 @@ export default async function handler(req, res) {
         if (!id) {
             return res.status(400).json({ message: "No ID provided" });
         }
-        const { brand, model, version, odometer, year, vinNumber, price } = req.body;
+        const { brand, model, version, odometer, year, vinNumber, price, photos } = req.body;
         try {
-            const carDoc = await Car.findByIdAndUpdate(id, { brand, model, version, odometer, year, vinNumber, price }, { new: true, runValidators: true });
+            const carDoc = await Car.findByIdAndUpdate(id, { brand, model, version, odometer, year, vinNumber, price, photos }, { new: true, runValidators: true });
             if (!carDoc) {
                 return res.status(404).json({ message: "Car not found" });
             }
