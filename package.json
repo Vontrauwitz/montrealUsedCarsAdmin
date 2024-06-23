@@ -20,6 +20,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-slick": "^0.30.2",
+    "react-sortablejs": "^6.1.4",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {

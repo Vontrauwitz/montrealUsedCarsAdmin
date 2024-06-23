@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
+import { ReactSortable } from 'react-sortablejs';
 
 function CarForm({ initialData, onSubmit }) {
   const [brand, setBrand] = useState(initialData?.brand || '');
@@ -166,31 +167,35 @@ function CarForm({ initialData, onSubmit }) {
           <input {...getInputProps()} />
           {isDragActive ? <p>Drop the files here...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
         </div>
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {existingPhotos.map((photo, index) => (
-            <div key={index} className="relative">
-              <img src={photo} alt={`Existing photo ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
-              <button
-                type="button"
-                onClick={() => handleRemoveExistingPhoto(photo)}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-              >
-                &times;
-              </button>
-            </div>
-          ))}
-          {photos.map((photo, index) => (
-            <div key={index} className="relative">
-              <img src={photo.preview} alt={`New photo ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
-              <button
-                type="button"
-                onClick={() => handleRemovePhoto(photo)}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-              >
-                &times;
-              </button>
-            </div>
-          ))}
+        <div className="mt-4">
+          <ReactSortable list={existingPhotos} setList={setExistingPhotos} className="grid grid-cols-3 gap-2">
+            {existingPhotos.map((photo, index) => (
+              <div key={index} className="relative mb-2">
+                <img src={photo} alt={`Existing photo ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveExistingPhoto(photo)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </ReactSortable>
+          <ReactSortable list={photos} setList={setPhotos} className="grid grid-cols-3 gap-2">
+            {photos.map((photo, index) => (
+              <div key={index} className="relative mb-2">
+                <img src={photo.preview} alt={`New photo ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                <button
+                  type="button"
+                  onClick={() => handleRemovePhoto(photo)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </ReactSortable>
         </div>
       </div>
       <button className="w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-700" type="submit" disabled={uploading}>
