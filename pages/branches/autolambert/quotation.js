@@ -1,5 +1,3 @@
-// pages/branches/autolambert/quotation.js
-
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Layout from '@/components/Layout';
@@ -32,7 +30,7 @@ const QuotationPage = () => {
   });
 
   useEffect(() => {
-    axios.get('/api/cars')
+    axios.get('/api/cars?dealership=Auto Lambert')
       .then(response => {
         setCars(response.data);
       })

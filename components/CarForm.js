@@ -11,6 +11,7 @@ function CarForm({ initialData, onSubmit }) {
   const [year, setYear] = useState(initialData?.year || '');
   const [vinNumber, setVinNumber] = useState(initialData?.vinNumber || '');
   const [price, setPrice] = useState(initialData?.price || '');
+  const [dealership, setDealership] = useState(initialData?.dealership || ''); // Añadido
   const [photos, setPhotos] = useState([]);
   const [existingPhotos, setExistingPhotos] = useState(initialData?.photos || []);
   const [uploading, setUploading] = useState(false);
@@ -68,6 +69,7 @@ function CarForm({ initialData, onSubmit }) {
         year, 
         vinNumber, 
         price,
+        dealership, // Añadido
         photos: [...existingPhotos, ...uploadedPhotos]
       };
 
@@ -157,6 +159,20 @@ function CarForm({ initialData, onSubmit }) {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
+      </div>
+      <div className="mb-4">
+        <label className="block text-white mb-2" htmlFor="dealership">Dealership</label>
+        <select
+          className="w-full p-2 rounded-lg bg-gray-700 text-white"
+          id="dealership"
+          name="dealership"
+          value={dealership}
+          onChange={(e) => setDealership(e.target.value)}
+        >
+          <option value="">Select a dealership</option>
+          <option value="Auto Lambert">Auto Lambert</option>
+          <option value="Mega Autos">Mega Autos</option>
+        </select>
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="photos">Photos</label>

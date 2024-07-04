@@ -10,18 +10,31 @@ import "slick-carousel/slick/slick-theme.css";
 export default function Cars() {
   const { data: session, status } = useSession();
   const [cars, setCars] = useState([]);
+  const [filteredCars, setFilteredCars] = useState([]);
+  const [selectedDealership, setSelectedDealership] = useState('');
 
   useEffect(() => {
     if (status === 'authenticated') {
       axios.get('/api/cars')
         .then(response => {
           setCars(response.data);
+          setFilteredCars(response.data); // Initialize with all cars
         })
         .catch(error => {
           console.error('Error fetching cars:', error);
         });
     }
   }, [status]);
+
+  const handleDealershipChange = (e) => {
+    const dealership = e.target.value;
+    setSelectedDealership(dealership);
+    if (dealership) {
+      setFilteredCars(cars.filter(car => car.dealership === dealership));
+    } else {
+      setFilteredCars(cars);
+    }
+  };
 
   const settings = {
     dots: false,
@@ -37,8 +50,21 @@ export default function Cars() {
     <Layout session={session}>
       <div className='text-black p-5'>
         <Link href='/cars/new' className='inline-block bg-gray-300 rounded-md text-black py-1 px-2 mb-4'>Add New Cars</Link>
+        <div className='mb-4'>
+          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='dealership'>Filter by Dealership</label>
+          <select 
+            id='dealership' 
+            value={selectedDealership} 
+            onChange={handleDealershipChange}
+            className='block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline'
+          >
+            <option value=''>All Dealerships</option>
+            <option value='Mega Autos'>Mega Autos</option>
+            <option value='Auto Lambert'>Auto Lambert</option>
+          </select>
+        </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {cars.map(car => (
+          {filteredCars.map(car => (
             <div key={car._id} className='card bg-white rounded-lg shadow-lg p-5 '>
               <div className='flex flex-col md:flex-row'>
                 <div className='w-full md:w-2/3'>
@@ -48,6 +74,7 @@ export default function Cars() {
                   <p className='text-sm'>Odometer: {car.odometer} km</p>
                   <p className='text-sm'>VIN: {car.vinNumber}</p>
                   <p className='text-sm'>Price: ${car.price}</p>
+                  <p className='text-sm'>Dealership: {car.dealership}</p>
                 </div>
                 <div className='w-full md:w-1/3'>
                   {car.photos && car.photos.length > 0 ? (
