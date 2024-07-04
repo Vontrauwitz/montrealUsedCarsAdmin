@@ -36,6 +36,11 @@ const Layout = ({ children }) => {
     };
   }, [sidebarOpen]);
 
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    window.location.href = '/'; // Redirigir a la página principal o de inicio de sesión
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -101,7 +106,7 @@ const Layout = ({ children }) => {
             <span>{session.user.email}</span>
             <button
               className="ml-4 bg-red-500 px-4 py-2 rounded hover:bg-red-700"
-              onClick={() => signOut()}
+              onClick={handleSignOut}
             >
               Sign out
             </button>
