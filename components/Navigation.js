@@ -1,4 +1,6 @@
+// components/Navigation.js
 import Link from 'next/link';
+import BranchDropdown from './branchDropdown';
 
 const Navigation = () => {
   return (
@@ -12,6 +14,8 @@ const Navigation = () => {
         </div>
       </Link>
       
+      <BranchDropdown />
+
       <Link href="/cars">
         <div className="mb-4 flex items-center cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-2">
@@ -43,3 +47,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
