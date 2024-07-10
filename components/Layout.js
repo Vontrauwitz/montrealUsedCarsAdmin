@@ -10,6 +10,7 @@ const Layout = ({ children, requireAuth = false }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const router = useRouter();
+  const isDashboard = router.pathname === '/dashboard';
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -137,27 +138,29 @@ const Layout = ({ children, requireAuth = false }) => {
             </svg>
           </button>
         )}
-        <header className="bg-white shadow-md fixed top-0 w-full z-20">
-          <div className="container mx-auto flex justify-between items-center p-6">
-            <div className="text-2xl font-bold text-blue-900">Auto Latino</div>
-            <nav className="space-x-4">
-              <Link href="/showroom">
-                <span className="cursor-pointer text-gray-700 hover:text-blue-500">
-                  Showroom
-                </span>
-              </Link>
-              {status === 'unauthenticated' && (
-                <button
-                  onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-                  className="bg-blue-500 text-white p-2 px-4 rounded-lg"
-                >
-                  Login with Google
-                </button>
-              )}
-            </nav>
-          </div>
-        </header>
-        <div className="pt-24">
+        {!isDashboard && (
+          <header className="bg-white shadow-md fixed top-0 w-full z-20">
+            <div className="container mx-auto flex justify-between items-center p-6">
+              <div className="text-2xl font-bold text-blue-900">Auto Latino</div>
+              <nav className="space-x-4">
+                <Link href="/showroom">
+                  <span className="cursor-pointer text-gray-700 hover:text-blue-500">
+                    Showroom
+                  </span>
+                </Link>
+                {status === 'unauthenticated' && (
+                  <button
+                    onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+                    className="bg-blue-500 text-white p-2 px-4 rounded-lg"
+                  >
+                    Login with Google
+                  </button>
+                )}
+              </nav>
+            </div>
+          </header>
+        )}
+        <div className={`pt-${isDashboard ? '8' : '24'}`}>
           {children}
         </div>
       </div>
