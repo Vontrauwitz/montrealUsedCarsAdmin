@@ -13,6 +13,7 @@ function CarForm({ initialData, onSubmit }) {
   const [vinNumber, setVinNumber] = useState('');
   const [price, setPrice] = useState('');
   const [dealership, setDealership] = useState('');
+  const [favorite, setFavorite] = useState(false); // Nuevo estado
   const [photos, setPhotos] = useState([]);
   const [existingPhotos, setExistingPhotos] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -28,6 +29,7 @@ function CarForm({ initialData, onSubmit }) {
       setVinNumber(initialData.vinNumber || '');
       setPrice(initialData.price || '');
       setDealership(initialData.dealership || '');
+      setFavorite(initialData.favorite || false); // Inicializar favorito
       setExistingPhotos(initialData.photos || []);
     }
   }, [initialData]);
@@ -95,7 +97,6 @@ function CarForm({ initialData, onSubmit }) {
     setUploading(true);
 
     try {
-      // Comprimir y subir nuevas imágenes a Cloudinary
       const uploadedPhotos = await Promise.all(photos.map(async (photo) => {
         const compressedFile = await imageCompression(photo, {
           maxSizeMB: 1,
@@ -123,6 +124,7 @@ function CarForm({ initialData, onSubmit }) {
         vinNumber, 
         price,
         dealership,
+        favorite, // Añadir favorito
         photos: [...existingPhotos, ...uploadedPhotos]
       };
 
@@ -234,6 +236,18 @@ function CarForm({ initialData, onSubmit }) {
           <option value="Mega Autos">Mega Autos</option>
         </select>
         {errors.dealership && <p className="text-red-500 text-sm">{errors.dealership}</p>}
+      </div>
+      <div className="mb-4">
+        <label className="block text-white mb-2">Favorite</label>
+        <label className="inline-flex items-center">
+          <input
+            type="checkbox"
+            className="form-checkbox h-5 w-5 text-blue-600"
+            checked={favorite}
+            onChange={(e) => setFavorite(e.target.checked)}
+          />
+          <span className="ml-2 text-white">Is this car a favorite?</span>
+        </label>
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="photos">Photos</label>

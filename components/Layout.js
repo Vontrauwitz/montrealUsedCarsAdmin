@@ -11,7 +11,6 @@ const Layout = ({ children, requireAuth = false }) => {
   const sidebarRef = useRef(null);
   const router = useRouter();
   const isDashboard = router.pathname === '/dashboard';
-  const isShowroom = router.pathname === '/showroom';
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -125,7 +124,7 @@ const Layout = ({ children, requireAuth = false }) => {
         </nav>
       )}
       <div className="flex-1 p-8 pt-16 min-h-screen" style={{ paddingLeft: sidebarOpen ? '16px' : '64px' }}>
-        {!sidebarOpen && session && !isDashboard && !isShowroom && (
+        {!sidebarOpen && session && (
           <button onClick={toggleSidebar} className="text-white focus:outline-none fixed top-4 left-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +138,7 @@ const Layout = ({ children, requireAuth = false }) => {
             </svg>
           </button>
         )}
-        {(!isDashboard && !isShowroom) && (
+        {!session && (
           <header className="bg-white shadow-md fixed top-0 w-full z-20">
             <div className="container mx-auto flex justify-between items-center p-6">
               <div className="text-2xl font-bold text-blue-900">Auto Latino</div>
@@ -161,7 +160,7 @@ const Layout = ({ children, requireAuth = false }) => {
             </div>
           </header>
         )}
-        <div className={`pt-${isDashboard || isShowroom ? '8' : '24'}`}>
+        <div className={`pt-${isDashboard ? '8' : '24'}`}>
           {children}
         </div>
       </div>
@@ -170,3 +169,5 @@ const Layout = ({ children, requireAuth = false }) => {
 };
 
 export default Layout;
+
+

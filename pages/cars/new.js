@@ -15,11 +15,11 @@ export default function NewCars() {
     try {
       const response = await axios.post('/api/cars', carData);
       console.log('Car created:', response.data);
-      setMessage('Coche cargado correctamente. Redirigiendo en 5 segundos...');
+      setMessage('Car created successfully. Redirecting in 5 seconds...');
       setCountdown(5);
     } catch (error) {
       console.error('Error creating car:', error);
-      setMessage('Error al cargar el coche');
+      setMessage('Error creating car');
     }
   };
 

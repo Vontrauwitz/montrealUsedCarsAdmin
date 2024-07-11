@@ -38,11 +38,11 @@ export default function EditProductPage() {
     try {
       const response = await axios.put(`/api/cars?id=${id}`, updatedData);
       console.log('Car updated:', response.data);
-      setMessage('Coche actualizado correctamente. Espera, serás redirigido en 5 segundos...');
+      setMessage('Car updated successfully. You will be redirected in 5 seconds...');
       setCountdown(5); // Reinicia el contador a 5 segundos
     } catch (error) {
       console.error('Error updating car:', error);
-      setMessage('Error al actualizar el coche');
+      setMessage('Error updating car');
     }
   };
 
@@ -58,7 +58,7 @@ export default function EditProductPage() {
     <Layout>
       <div className="max-w-2xl mx-auto mt-8">
         <h1 className="text-2xl font-bold mb-6 text-white">Edit a Car</h1>
-        {message && <p className="text-center text-green-500">{message.replace('5 segundos', `${countdown} segundos`)}</p>}
+        {message && <p className="text-center text-green-500">{message.replace('5 seconds', `${countdown} seconds`)}</p>}
         <CarForm initialData={productInfo} onSubmit={handleUpdate} />
         <button
           onClick={returnToInventory}
