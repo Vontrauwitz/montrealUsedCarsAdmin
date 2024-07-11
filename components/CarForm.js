@@ -2,23 +2,33 @@ import React, { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { ReactSortable } from 'react-sortablejs';
+import imageCompression from 'browser-image-compression';
 
 function CarForm({ initialData, onSubmit }) {
-  const [brand, setBrand] = useState(initialData?.brand || '');
-  const [model, setModel] = useState(initialData?.model || '');
-  const [version, setVersion] = useState(initialData?.version || '');
-  const [odometer, setOdometer] = useState(initialData?.odometer || '');
-  const [year, setYear] = useState(initialData?.year || '');
-  const [vinNumber, setVinNumber] = useState(initialData?.vinNumber || '');
-  const [price, setPrice] = useState(initialData?.price || '');
-  const [dealership, setDealership] = useState(initialData?.dealership || ''); // Añadido
+  const [brand, setBrand] = useState('');
+  const [model, setModel] = useState('');
+  const [version, setVersion] = useState('');
+  const [odometer, setOdometer] = useState('');
+  const [year, setYear] = useState('');
+  const [vinNumber, setVinNumber] = useState('');
+  const [price, setPrice] = useState('');
+  const [dealership, setDealership] = useState('');
   const [photos, setPhotos] = useState([]);
-  const [existingPhotos, setExistingPhotos] = useState(initialData?.photos || []);
+  const [existingPhotos, setExistingPhotos] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (initialData?.photos) {
-      setExistingPhotos(initialData.photos);
+    if (initialData) {
+      setBrand(initialData.brand || '');
+      setModel(initialData.model || '');
+      setVersion(initialData.version || '');
+      setOdometer(initialData.odometer || '');
+      setYear(initialData.year || '');
+      setVinNumber(initialData.vinNumber || '');
+      setPrice(initialData.price || '');
+      setDealership(initialData.dealership || '');
+      setExistingPhotos(initialData.photos || []);
     }
   }, [initialData]);
 
@@ -43,15 +53,58 @@ function CarForm({ initialData, onSubmit }) {
     setExistingPhotos(existingPhotos.filter(photo => photo !== url));
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!brand) newErrors.brand = 'Brand is required';
+    if (!model) newErrors.model = 'Model is required';
+    if (!version) newErrors.version = 'Version is required';
+    if (!odometer) {
+      newErrors.odometer = 'Odometer is required';
+    } else if (isNaN(odometer) || odometer < 0) {
+      newErrors.odometer = 'Odometer must be a positive number';
+    }
+    if (!year) {
+      newErrors.year = 'Year is required';
+    } else if (isNaN(year) || year < 1886 || year > new Date().getFullYear()) {
+      newErrors.year = 'Year must be a valid year';
+    }
+    if (!vinNumber) {
+      newErrors.vinNumber = 'VIN Number is required';
+    } else if (!/^[A-HJ-NPR-Z0-9]{17}$/.test(vinNumber)) {
+      newErrors.vinNumber = 'VIN Number must be 17 characters and exclude I, O, and Q';
+    }
+    if (!price) {
+      newErrors.price = 'Price is required';
+    } else if (isNaN(price) || price < 0) {
+      newErrors.price = 'Price must be a positive number';
+    }
+    if (!dealership) newErrors.dealership = 'Dealership is required';
+    if (photos.length + existingPhotos.length === 0) newErrors.photos = 'At least one photo is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validate()) {
+      return;
+    }
+
     setUploading(true);
 
     try {
-      // Subir nuevas imágenes a Cloudinary
+      // Comprimir y subir nuevas imágenes a Cloudinary
       const uploadedPhotos = await Promise.all(photos.map(async (photo) => {
+        const compressedFile = await imageCompression(photo, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        });
+
         const formData = new FormData();
-        formData.append('file', photo);
+        formData.append('file', compressedFile);
         formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
 
         const response = await axios.post(
@@ -69,7 +122,7 @@ function CarForm({ initialData, onSubmit }) {
         year, 
         vinNumber, 
         price,
-        dealership, // Añadido
+        dealership,
         photos: [...existingPhotos, ...uploadedPhotos]
       };
 
@@ -93,6 +146,7 @@ function CarForm({ initialData, onSubmit }) {
           value={brand}
           onChange={(e) => setBrand(e.target.value)}
         />
+        {errors.brand && <p className="text-red-500 text-sm">{errors.brand}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="model">Model</label>
@@ -104,6 +158,7 @@ function CarForm({ initialData, onSubmit }) {
           value={model}
           onChange={(e) => setModel(e.target.value)}
         />
+        {errors.model && <p className="text-red-500 text-sm">{errors.model}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="version">Version</label>
@@ -115,6 +170,7 @@ function CarForm({ initialData, onSubmit }) {
           value={version}
           onChange={(e) => setVersion(e.target.value)}
         />
+        {errors.version && <p className="text-red-500 text-sm">{errors.version}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="odometer">Odometer</label>
@@ -126,6 +182,7 @@ function CarForm({ initialData, onSubmit }) {
           value={odometer}
           onChange={(e) => setOdometer(e.target.value)}
         />
+        {errors.odometer && <p className="text-red-500 text-sm">{errors.odometer}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="year">Year</label>
@@ -137,6 +194,7 @@ function CarForm({ initialData, onSubmit }) {
           value={year}
           onChange={(e) => setYear(e.target.value)}
         />
+        {errors.year && <p className="text-red-500 text-sm">{errors.year}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="vinNumber">VIN Number</label>
@@ -148,6 +206,7 @@ function CarForm({ initialData, onSubmit }) {
           value={vinNumber}
           onChange={(e) => setVinNumber(e.target.value)}
         />
+        {errors.vinNumber && <p className="text-red-500 text-sm">{errors.vinNumber}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="price">Price</label>
@@ -159,6 +218,7 @@ function CarForm({ initialData, onSubmit }) {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
+        {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="dealership">Dealership</label>
@@ -173,6 +233,7 @@ function CarForm({ initialData, onSubmit }) {
           <option value="Auto Lambert">Auto Lambert</option>
           <option value="Mega Autos">Mega Autos</option>
         </select>
+        {errors.dealership && <p className="text-red-500 text-sm">{errors.dealership}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-white mb-2" htmlFor="photos">Photos</label>
@@ -183,6 +244,7 @@ function CarForm({ initialData, onSubmit }) {
           <input {...getInputProps()} />
           {isDragActive ? <p>Drop the files here...</p> : <p>Drag 'n' drop some files here, or click to select files</p>}
         </div>
+        {errors.photos && <p className="text-red-500 text-sm">{errors.photos}</p>}
         <div className="mt-4">
           <ReactSortable list={existingPhotos} setList={setExistingPhotos} className="grid grid-cols-3 gap-2">
             {existingPhotos.map((photo, index) => (

@@ -19,10 +19,12 @@ export default async function handler(req, res) {
     }
   } else if (method === 'GET') {
     try {
-      const { dealership } = req.query;
+      const { id, dealership } = req.query;
       let cars;
 
-      if (dealership) {
+      if (id) {
+        cars = await Car.findById(id);
+      } else if (dealership) {
         cars = await Car.find({ dealership });
       } else {
         cars = await Car.find({});
@@ -47,7 +49,7 @@ export default async function handler(req, res) {
       res.status(200).json(carDoc);
     } catch (error) {
       console.error("Error updating car:", error);
-      res.status(500).json({ message: "Error updating car", error: error.message });
+      res.status500.json({ message: "Error updating car", error: error.message });
     }
   } else if (method === 'DELETE') {
     const { id } = req.query;
