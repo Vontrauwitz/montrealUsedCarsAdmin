@@ -7,7 +7,7 @@ import CarForm from '@/components/CarForm';
 export default function EditProductPage() {
   const [productInfo, setProductInfo] = useState(null);
   const [message, setMessage] = useState('');
-  const [countdown, setCountdown] = useState(5); // Estado para el contador
+  const [countdown, setCountdown] = useState(null); // Estado para el contador
   const router = useRouter();
   const { id } = router.query;
 
@@ -24,15 +24,15 @@ export default function EditProductPage() {
   }, [id]);
 
   useEffect(() => {
-    if (countdown > 0 && message.includes('serás redirigido')) {
-      const timer = setTimeout(() => {
-        setCountdown(prevCountdown => prevCountdown - 1);
-      }, 1000);
-      return () => clearTimeout(timer); // Limpia el temporizador en la limpieza del efecto
-    } else if (countdown === 0) {
+    if (countdown === null) return;
+
+    if (countdown === 0) {
       router.push('/cars');
+    } else {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [countdown, message, router]);
+  }, [countdown, router]);
 
   const handleUpdate = async (updatedData) => {
     try {
@@ -58,7 +58,7 @@ export default function EditProductPage() {
     <Layout>
       <div className="max-w-2xl mx-auto mt-8">
         <h1 className="text-2xl font-bold mb-6 text-white">Edit a Car</h1>
-        {message && <p className="text-center text-green-500">{message.replace('5 seconds', `${countdown} seconds`)}</p>}
+        {message && <p className="text-center text-green-500">{message.replace('5 seconds', `${countdown !== null ? countdown : 5} seconds`)}</p>}
         <CarForm initialData={productInfo} onSubmit={handleUpdate} />
         <button
           onClick={returnToInventory}

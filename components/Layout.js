@@ -123,7 +123,7 @@ const Layout = ({ children, requireAuth = false }) => {
           </div>
         </nav>
       )}
-      <div className="flex-1 p-8 pt-16 min-h-screen" style={{ paddingLeft: sidebarOpen ? '16px' : '64px' }}>
+      <div className="flex-1  pt-16 min-h-screen" style={{ paddingLeft: sidebarOpen ? '16px' : '0px' }}>
         {!sidebarOpen && session && (
           <button onClick={toggleSidebar} className="text-white focus:outline-none fixed top-4 left-4">
             <svg

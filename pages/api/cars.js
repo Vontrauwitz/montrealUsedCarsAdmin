@@ -8,8 +8,8 @@ export default async function handler(req, res) {
 
   if (method === 'POST') {
     try {
-      const { brand, model, version, odometer, year, vinNumber, price, photos, dealership } = req.body;
-      const carData = { brand, model, version, odometer, year, vinNumber, price, photos, dealership };
+      const { brand, model, version, odometer, year, vinNumber, price, photos, dealership, favorite } = req.body;
+      const carData = { brand, model, version, odometer, year, vinNumber, price, photos, dealership, favorite };
 
       const carDoc = await Car.create(carData);
       res.status(201).json(carDoc);
@@ -40,16 +40,16 @@ export default async function handler(req, res) {
     if (!id) {
       return res.status(400).json({ message: "No ID provided" });
     }
-    const { brand, model, version, odometer, year, vinNumber, price, photos, dealership } = req.body;
+    const { brand, model, version, odometer, year, vinNumber, price, photos, dealership, favorite } = req.body;
     try {
-      const carDoc = await Car.findByIdAndUpdate(id, { brand, model, version, odometer, year, vinNumber, price, photos, dealership }, { new: true, runValidators: true });
+      const carDoc = await Car.findByIdAndUpdate(id, { brand, model, version, odometer, year, vinNumber, price, photos, dealership, favorite }, { new: true, runValidators: true });
       if (!carDoc) {
         return res.status(404).json({ message: "Car not found" });
       }
       res.status(200).json(carDoc);
     } catch (error) {
       console.error("Error updating car:", error);
-      res.status500.json({ message: "Error updating car", error: error.message });
+      res.status(500).json({ message: "Error updating car", error: error.message });
     }
   } else if (method === 'DELETE') {
     const { id } = req.query;
