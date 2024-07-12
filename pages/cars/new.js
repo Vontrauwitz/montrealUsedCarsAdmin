@@ -39,7 +39,7 @@ export default function NewCars() {
   };
 
   if (status === 'loading') {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   return (

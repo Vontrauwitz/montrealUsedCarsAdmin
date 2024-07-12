@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import Loader from '@/components/Loader';
 
 export default function ConfirmDelete() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function ConfirmDelete() {
     return (
       <Layout>
         <div className="max-w-2xl mx-auto mt-8 text-center">
-          <h1 className="text-2xl font-bold mb-6 text-white">Loading...</h1>
+          <Loader/>;
         </div>
       </Layout>
     );

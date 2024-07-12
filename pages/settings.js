@@ -5,7 +5,7 @@ export default function Settings() {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   return (

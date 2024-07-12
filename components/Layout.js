@@ -3,6 +3,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import Navigation from '@/components/Navigation';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Loader from './Loader';
 
 const Layout = ({ children, requireAuth = false }) => {
   const { data: session, status } = useSession();
@@ -50,7 +51,7 @@ const Layout = ({ children, requireAuth = false }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   if (requireAuth && !session) {
