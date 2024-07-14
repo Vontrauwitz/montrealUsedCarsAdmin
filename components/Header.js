@@ -14,15 +14,15 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center p-6 relative">
         <img src="/images/latinride.png" alt="Auto Latino Logo" className="h-20 absolute top-1/2 transform -translate-y-1/2" />
         <nav className="space-x-4 ml-auto">
-          <Link href="/showroom">
+          {/* <Link href="/showroom">
             <span className="cursor-pointer text-gray-700 hover:text-blue-500">Showroom</span>
-          </Link>
+          </Link> */}
           {status === 'unauthenticated' && (
             <button
               onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
               className="bg-blue-500 text-white p-2 px-4 rounded-lg"
             >
-              Login with Google
+              Admin Access
             </button>
           )}
           {status === 'authenticated' && (
