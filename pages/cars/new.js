@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import axios from 'axios';
 import CarForm from '@/components/CarForm';
 import { useRouter } from 'next/router';
+import Loader from '@/components/Loader'
 
 export default function NewCars() {
   const { data: session, status } = useSession();
