@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import Layout from '@/components/Layout';
+import Loader from '@/components/Loader'
 
 export default function Settings() {
   const { data: session, status } = useSession();
