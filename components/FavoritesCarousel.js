@@ -22,11 +22,13 @@ const FavoritesCarousel = () => {
   }, []);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 300, // velocidad más rápida
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true, // movimiento automático
+    autoplaySpeed: 2000, // intervalo de 2 segundos
   };
 
   if (favoriteCars.length === 0) {
@@ -34,9 +36,9 @@ const FavoritesCarousel = () => {
   }
 
   return (
-    <section className="w-full py-10 bg-gray-100">
+    <section className="w-full py-10 bg-black">
       <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-10 text-blue-900">Our Favorite Picks for You</h2>
+        <h2 className="text-4xl font-bold text-center mb-10 text-green-500">Our Favorite Picks for You</h2>
         <div className="max-w-screen-lg mx-auto">
           <Slider {...settings}>
             {favoriteCars.map(car => (
@@ -44,9 +46,9 @@ const FavoritesCarousel = () => {
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                   <img src={car.photos[0]} alt={`${car.brand} ${car.model}`} className="w-full h-64 object-cover" />
                   <div className="p-4">
-                    <h3 className="text-2xl font-bold">{car.brand} {car.model}</h3>
-                    <p className="text-lg">{car.year}</p>
-                    <p className="text-lg">${car.price}</p>
+                    <h3 className="text-2xl font-bold text-black">{car.brand} {car.model}</h3>
+                    <p className="text-lg text-black">{car.year}</p>
+                    <p className="text-lg text-black">${car.price}</p>
                   </div>
                 </div>
               </div>

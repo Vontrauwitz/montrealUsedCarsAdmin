@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import Navigation from '@/components/Navigation';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Loader from './Loader';
+import Header from './Header';
 
 const Layout = ({ children, requireAuth = false }) => {
   const { data: session, status } = useSession();
@@ -51,17 +51,17 @@ const Layout = ({ children, requireAuth = false }) => {
   };
 
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   if (requireAuth && !session) {
     return (
-      <div className="bg-blue-900 w-screen h-screen flex items-center justify-center">
+      <div className="bg-black w-screen h-screen flex items-center justify-center">
         <div className="text-center text-white">
           <h2 className="mb-4">No estás autorizado. Por favor, inicia sesión.</h2>
           <button
             onClick={() => signIn('google')}
-            className="bg-white text-blue-900 p-2 px-4 rounded-lg"
+            className="bg-white text-black p-2 px-4 rounded-lg"
           >
             Login with Google
           </button>
@@ -71,7 +71,7 @@ const Layout = ({ children, requireAuth = false }) => {
   }
 
   return (
-    <div className="bg-blue-900 w-screen min-h-screen flex">
+    <div className="bg-black w-screen min-h-screen flex">
       {session && (
         <nav
           ref={sidebarRef}
@@ -124,7 +124,7 @@ const Layout = ({ children, requireAuth = false }) => {
           </div>
         </nav>
       )}
-      <div className="flex-1  pt-16 min-h-screen" style={{ paddingLeft: sidebarOpen ? '16px' : '0px' }}>
+      <div className="flex-1 pt-16 min-h-screen" style={{ paddingLeft: sidebarOpen ? '16px' : '0px' }}>
         {!sidebarOpen && session && (
           <button onClick={toggleSidebar} className="text-white focus:outline-none fixed top-4 left-4">
             <svg
@@ -139,28 +139,7 @@ const Layout = ({ children, requireAuth = false }) => {
             </svg>
           </button>
         )}
-        {!session && (
-          <header className="bg-white shadow-md fixed top-0 w-full z-20">
-            <div className="container mx-auto flex justify-between items-center p-6">
-              <div className="text-2xl font-bold text-blue-900">Auto Latino</div>
-              <nav className="space-x-4">
-                <Link href="/showroom">
-                  <span className="cursor-pointer text-gray-700 hover:text-blue-500">
-                    Showroom
-                  </span>
-                </Link>
-                {status === 'unauthenticated' && (
-                  <button
-                    onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-                    className="bg-blue-500 text-white p-2 px-4 rounded-lg"
-                  >
-                    Login with Google
-                  </button>
-                )}
-              </nav>
-            </div>
-          </header>
-        )}
+        {!session && <Header />}
         <div className={`pt-${isDashboard ? '8' : '24'}`}>
           {children}
         </div>
@@ -170,5 +149,3 @@ const Layout = ({ children, requireAuth = false }) => {
 };
 
 export default Layout;
-
-
