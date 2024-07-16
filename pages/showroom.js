@@ -67,7 +67,7 @@ const Showroom = () => {
     <main className="min-h-screen bg-gray-100 text-gray-900">
       <header className="bg-white shadow-md fixed w-full z-10">
         <div className="container mx-auto flex justify-between items-center p-6">
-          <div className="text-2xl font-bold text-blue-900">Auto Latino Showroom</div>
+          <div className="text-2xl font-bold text-blue-900">Latin Ride Showroom</div>
           <nav className="space-x-4">
             <button
               onClick={handleSignOut}
@@ -159,7 +159,7 @@ const Showroom = () => {
       </section>
       <footer className="bg-gray-800 text-white py-6">
         <div className="container mx-auto text-center">
-          <p>&copy; 2024 Auto Latino. All rights reserved.</p>
+          <p>&copy; 2024 Latin Ride. All rights reserved.</p>
         </div>
       </footer>
     </main>

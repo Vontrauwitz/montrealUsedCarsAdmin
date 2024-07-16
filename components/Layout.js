@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Navigation from '@/components/Navigation';
 import { useRouter } from 'next/router';
 import Loader from './Loader';

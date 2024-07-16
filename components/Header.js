@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <header className="bg-black shadow-md w-full fixed top-0 z-20">
       <div className="container mx-auto flex justify-between items-center p-6 relative">
-        <img src="/images/latinride.png" alt="Auto Latino Logo" className="h-20 absolute top-1/2 transform -translate-y-1/2" />
+        <img src="/images/latinride.png" alt="Latin Ride Logo" className="h-20 absolute top-1/2 transform -translate-y-1/2" />
         <nav className="space-x-4 ml-auto">
           {/* <Link href="/showroom">
             <span className="cursor-pointer text-gray-700 hover:text-blue-500">Showroom</span>
